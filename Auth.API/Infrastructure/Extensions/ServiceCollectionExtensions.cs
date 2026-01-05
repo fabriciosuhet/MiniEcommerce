@@ -1,5 +1,7 @@
 ﻿using Auth.API.Repositories;
 using Auth.API.Repositories.Interfaces;
+using Auth.API.Services;
+using Auth.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.Infrastructure.Extensions
@@ -9,8 +11,7 @@ namespace Auth.API.Infrastructure.Extensions
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<AuthDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString(connectionString)));
+            services.AddDbContext<AuthDbContext>(opt => opt.UseSqlServer(connectionString));
             return services;
         }
 
@@ -22,7 +23,7 @@ namespace Auth.API.Infrastructure.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            // Register other services here
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
     }

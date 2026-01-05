@@ -6,11 +6,6 @@ namespace Auth.API.Infrastructure
     public class AuthDbContext : DbContext
     {
 
-        public AuthDbContext()
-        {
-
-        }
-
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
 
