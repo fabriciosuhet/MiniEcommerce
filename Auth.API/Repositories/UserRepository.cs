@@ -1,6 +1,7 @@
 ﻿using Auth.API.Entities;
 using Auth.API.Infrastructure;
 using Auth.API.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.Repositories
 {
@@ -12,19 +13,20 @@ namespace Auth.API.Repositories
             _context = context;
         }
 
-        public Task AddAsync(User user)
+        public async Task AddAsync(User user)
         {
-            throw new NotImplementedException();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<User?> GetByEmailAsync(string email)
+        public async Task<User?> GetByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
         }
 
-        public Task<User?> GetByIdAsync(Guid id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
         }
     }
 }
