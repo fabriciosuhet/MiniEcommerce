@@ -120,7 +120,27 @@ As decisões arquiteturais seguem boas práticas reais, mas priorizam clareza e 
 
 ---
 
+```mermaid
+flowchart LR
+
+    Client[Cliente / Front-end]
+    
+    Client --> AuthApi[Auth.Api]
+    Client --> CatalogoApi[Catalogo.Api]
+    Client --> PedidosApi[Pedidos.Api]
+
+    AuthApi --> AuthDB[(AuthDB)]
+    CatalogoApi --> CatalogoDB[(CatalogoDB)]
+    PedidosApi --> OrdersDB[(OrdersDB)]
+
+    PedidosApi --> AuthApi
+    PedidosApi --> CatalogoApi
+
+```
+
 ## 👨‍💻 Autor
 
 **Fabrício Suhet**  
 Desenvolvedor .NET | Estudante de Arquitetura de Software e Microsserviços
+
+
