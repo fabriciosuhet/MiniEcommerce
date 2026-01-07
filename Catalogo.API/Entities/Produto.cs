@@ -7,19 +7,36 @@
         public string Descricao { get; private set; }
         public decimal Preco { get; private set; }
         public int Estoque { get; private set; }
-        public bool Ativo { get; private set; }
+        public bool Ativo { get; private set; } = true;
         public Guid CategoriaId { get; private set; }
         public Categoria Categoria { get; private set; }
 
-        public Produto(string nome, string descricao, decimal preco, int estoque, bool ativo, Guid categoriaId, Categoria categoria)
+        public Produto(string nome, string descricao, decimal preco, int estoque, Guid categoriaId)
         {
             Nome = nome;
             Descricao = descricao;
             Preco = preco;
             Estoque = estoque;
-            Ativo = ativo;
             CategoriaId = categoriaId;
-            Categoria = categoria;
+        }
+
+        public void AtualizarDados(
+            string nome,
+            string descricao,
+            decimal preco,
+            int estoque,
+            Guid categoriaId)
+        {
+            Nome = nome;
+            Descricao = descricao;
+            Preco = preco;
+            Estoque = estoque;
+            CategoriaId = categoriaId;
+        }
+
+        public void Inativar()
+        {
+            Ativo = false;
         }
     }
 }

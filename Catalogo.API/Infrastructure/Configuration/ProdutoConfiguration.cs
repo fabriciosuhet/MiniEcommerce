@@ -28,9 +28,6 @@ namespace Catalogo.API.Infrastructure.Configuration
 
             builder.Property(p => p.Estoque)
                 .IsRequired();
-
-            builder.Property(p => p.Ativo)
-                .IsRequired();
         }
     }
 }
