@@ -1,7 +1,6 @@
 ﻿using Auth.API.Entities;
 using Auth.API.Repositories.Interfaces;
 using Auth.API.Services.Interfaces;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 
