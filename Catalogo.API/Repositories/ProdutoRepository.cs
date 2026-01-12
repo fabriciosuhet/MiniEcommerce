@@ -1,4 +1,5 @@
 ﻿using Catalogo.API.Entities;
+using Catalogo.API.Filters;
 using Catalogo.API.Infrastructure;
 using Catalogo.API.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace Catalogo.API.Repositories
         {
             var produtoId = await _context.Produtos
                 .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (produtoId is null) return;
 
@@ -36,20 +37,36 @@ namespace Catalogo.API.Repositories
             return await _context.Produtos.AnyAsync(p => p.Id == id);
         }
 
-        public async Task<IEnumerable<Produto>> GetAllAsync(string? query)
+        public async Task<IEnumerable<Produto>> GetAllAsync(ProdutoFiltro filtro)
         {
-            return await _context.Produtos
+            IQueryable<Produto> query = _context.Produtos
                 .AsNoTracking()
-                .Include(p => p.CategoriaId)
-                .Where(p => string.IsNullOrEmpty(query) || p.Nome.Contains(query))
-                .ToListAsync();
+                .Include(p => p.Categoria);
+
+            if (!string.IsNullOrEmpty(filtro.TermoBusca))
+            {
+                query = query.Where(p => p.Nome.Contains(filtro.TermoBusca));
+            }
+
+            if (filtro.CategoriaId.HasValue)
+            {
+                query = query.Where(p => p.CategoriaId == filtro.CategoriaId.Value);
+            }
+
+            if (filtro.ApenasAtivos)
+            {
+                query = query.Where(p => p.Ativo);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Produto?> GetByIdAsync(Guid id)
         {
             return await _context.Produtos
                 .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.Categoria)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task UpdateAsync(Produto produto)

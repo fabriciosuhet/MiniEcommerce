@@ -18,21 +18,7 @@ namespace Catalogo.API.Services
         public async Task<Guid> CreateProdutoAsync(string nome, string descricao, decimal preco, int estoque, Guid categoriaId)
         {
             var categoriaExiste = await _categoriaRepository.ExisteAsync(categoriaId);
-            if (!categoriaExiste)
-            {
-                throw new ArgumentException("Categoria não encontrada");
-            }
-
-            if (preco < 0)
-            {
-                throw new ArgumentException("Preço deve ser maior que 0");
-            }
-
-            if (estoque < 0)
-            {
-                throw new ArgumentException("Estoque não pode ser negativo");
-            }
-
+           
             var produto = new Produto(nome, descricao, preco, estoque, categoriaId);
 
             await _produtoRepository.AddAsync(produto);
@@ -55,25 +41,15 @@ namespace Catalogo.API.Services
             var produto = await _produtoRepository.GetByIdAsync(produtoId);
             if (produto is null)
             {
-                throw new ArgumentException("Produto não encontrado");
+                throw new KeyNotFoundException("Produto não encontrado");
             }
 
             var categoriaExiste = await _categoriaRepository.ExisteAsync(categoriaId);
             if (!categoriaExiste)
             {
-                throw new ArgumentException("Categoria não encontrada");
+                throw new DomainException("Categoria não encontrada");
             }
-
-            if (preco <= 0)
-            {
-                throw new ArgumentException("Preço deve ser maior que 0");
-            }
-
-            if (estoque < 0)
-            {
-                throw new ArgumentException("Estoque não pode ser negativo");
-            }
-
+            
             produto.AtualizarDados(nome, descricao, preco, estoque, categoriaId);
 
             await _produtoRepository.UpdateAsync(produto);
